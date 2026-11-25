@@ -1,10 +1,20 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    {
+      name: 'petra-source-html',
+      transformIndexHtml: {
+        order: 'pre',
+        handler: () => readFileSync(new URL('./vite-entry.html', import.meta.url), 'utf8'),
+      },
+    },
+    react(), tailwindcss(),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
